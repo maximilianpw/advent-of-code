@@ -1,4 +1,4 @@
-use std::fs;
+use std::{fs, ops::Div};
 
 fn main() {
     let contents = fs::read_to_string("input.txt").expect("couldn't read file");
@@ -10,15 +10,22 @@ fn main() {
         let distance: i32 = line[1..].parse().unwrap();
 
         match line.chars().next().unwrap() {
-            'R' => position += distance,
-            'L' => position -= distance,
+            'R' => {
+                let old_position = position;
+                position += distance
+            }
+            'L' => {
+                let old_position = position;
+                position -= distance
+            }
             _ => panic!("unexpected direction"),
         }
 
+        password += position.div(100);
         position = position.rem_euclid(100);
-        if position == 0 {
-            password += 1;
-        }
+        // if position == 0 {
+        //     password += 1;
+        // }
     }
 
     println!("password: {}", password);
